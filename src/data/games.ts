@@ -1,0 +1,46 @@
+import type { EntrantRef, Game } from "../types";
+
+const team = (teamId: string): EntrantRef => ({ kind: "team", teamId });
+const winner = (gameId: number): EntrantRef => ({ kind: "winner", gameId });
+const loser = (gameId: number): EntrantRef => ({ kind: "loser", gameId });
+
+export const games: Game[] = [
+  { id: 1, side: "international", round: "Opening Round", bracket: "winners", dateTime: "2026-08-19T13:00:00-04:00", venue: "Volunteer", teamA: team("latin-america"), teamB: team("caribbean"), winnerAdvancesTo: 9, loserAdvancesTo: 15, scoreA: 2, scoreB: 1, status: "final" },
+  { id: 2, side: "us", round: "Opening Round", bracket: "winners", dateTime: "2026-08-19T15:00:00-04:00", venue: "Lamade", teamA: team("northwest"), teamB: team("southeast"), winnerAdvancesTo: 10, loserAdvancesTo: 16, scoreA: 2, scoreB: 0, status: "final" },
+  { id: 3, side: "international", round: "Opening Round", bracket: "winners", dateTime: "2026-08-19T17:00:00-04:00", venue: "Volunteer", teamA: team("canada"), teamB: team("asia-pacific"), winnerAdvancesTo: 11, loserAdvancesTo: 13, scoreA: 0, scoreB: 7, status: "final" },
+  { id: 4, side: "us", round: "Opening Round", bracket: "winners", dateTime: "2026-08-19T19:00:00-04:00", venue: "Lamade", teamA: team("new-england"), teamB: team("metro"), winnerAdvancesTo: 12, loserAdvancesTo: 14, scoreA: 1, scoreB: 2, status: "final" },
+  { id: 5, side: "international", round: "Opening Round", bracket: "winners", dateTime: "2026-08-21T09:00:00-04:00", venue: "Volunteer", teamA: team("australia"), teamB: team("mexico"), winnerAdvancesTo: 18, loserAdvancesTo: 13, status: "scheduled" },
+  { id: 6, side: "us", round: "Opening Round", bracket: "winners", dateTime: "2026-08-21T09:00:00-04:00", venue: "Lamade", teamA: team("great-lakes"), teamB: team("mountain"), winnerAdvancesTo: 17, loserAdvancesTo: 14, status: "scheduled" },
+  { id: 7, side: "international", round: "Opening Round", bracket: "winners", dateTime: "2026-08-21T12:00:00-04:00", venue: "Volunteer", teamA: team("japan"), teamB: team("curacao"), winnerAdvancesTo: 20, loserAdvancesTo: 15, status: "scheduled" },
+  { id: 8, side: "us", round: "Opening Round", bracket: "winners", dateTime: "2026-08-21T12:00:00-04:00", venue: "Lamade", teamA: team("west"), teamB: team("midwest"), winnerAdvancesTo: 19, loserAdvancesTo: 16, status: "scheduled" },
+  { id: 9, side: "international", round: "Winners Round 2", bracket: "winners", dateTime: "2026-08-21T15:00:00-04:00", venue: "Volunteer", teamA: team("panama"), teamB: winner(1), winnerAdvancesTo: 18, loserAdvancesTo: 21, status: "scheduled" },
+  { id: 10, side: "us", round: "Winners Round 2", bracket: "winners", dateTime: "2026-08-21T15:00:00-04:00", venue: "Lamade", teamA: team("southwest"), teamB: winner(2), winnerAdvancesTo: 17, loserAdvancesTo: 22, status: "scheduled" },
+  { id: 11, side: "international", round: "Winners Round 2", bracket: "winners", dateTime: "2026-08-21T18:00:00-04:00", venue: "Volunteer", teamA: team("europe-africa"), teamB: winner(3), winnerAdvancesTo: 20, loserAdvancesTo: 23, status: "scheduled" },
+  { id: 12, side: "us", round: "Winners Round 2", bracket: "winners", dateTime: "2026-08-21T19:00:00-04:00", venue: "Lamade", teamA: team("mid-atlantic"), teamB: winner(4), winnerAdvancesTo: 19, loserAdvancesTo: 24, status: "scheduled" },
+  { id: 13, side: "international", round: "Elimination Round 1", bracket: "elimination", dateTime: "2026-08-22T13:00:00-04:00", venue: "Volunteer", teamA: loser(3), teamB: loser(5), winnerAdvancesTo: 21, status: "scheduled" },
+  { id: 14, side: "us", round: "Elimination Round 1", bracket: "elimination", dateTime: "2026-08-22T15:00:00-04:00", venue: "Lamade", teamA: loser(4), teamB: loser(6), winnerAdvancesTo: 22, status: "scheduled" },
+  { id: 15, side: "international", round: "Elimination Round 1", bracket: "elimination", dateTime: "2026-08-22T17:00:00-04:00", venue: "Volunteer", teamA: loser(1), teamB: loser(7), winnerAdvancesTo: 23, status: "scheduled" },
+  { id: 16, side: "us", round: "Elimination Round 1", bracket: "elimination", dateTime: "2026-08-22T19:00:00-04:00", venue: "Lamade", teamA: loser(2), teamB: loser(8), winnerAdvancesTo: 24, status: "scheduled" },
+  { id: 17, side: "us", round: "Winners Semifinal", bracket: "winners", dateTime: "2026-08-23T09:00:00-04:00", venue: "Lamade", teamA: winner(6), teamB: winner(10), winnerAdvancesTo: 30, loserAdvancesTo: 26, status: "scheduled" },
+  { id: 18, side: "international", round: "Winners Semifinal", bracket: "winners", dateTime: "2026-08-23T11:00:00-04:00", venue: "Volunteer", teamA: winner(5), teamB: winner(9), winnerAdvancesTo: 29, loserAdvancesTo: 25, status: "scheduled" },
+  { id: 19, side: "us", round: "Winners Semifinal", bracket: "winners", dateTime: "2026-08-23T13:00:00-04:00", venue: "Lamade", teamA: winner(8), teamB: winner(12), winnerAdvancesTo: 30, loserAdvancesTo: 28, status: "scheduled" },
+  { id: 20, side: "international", round: "Winners Semifinal", bracket: "winners", dateTime: "2026-08-23T14:00:00-04:00", venue: "Volunteer", teamA: winner(7), teamB: winner(11), winnerAdvancesTo: 29, loserAdvancesTo: 27, status: "scheduled" },
+  { id: 21, side: "international", round: "Elimination Round 2", bracket: "elimination", dateTime: "2026-08-24T13:00:00-04:00", venue: "Volunteer", teamA: loser(9), teamB: winner(13), winnerAdvancesTo: 27, status: "scheduled" },
+  { id: 22, side: "us", round: "Elimination Round 2", bracket: "elimination", dateTime: "2026-08-24T15:00:00-04:00", venue: "Lamade", teamA: loser(10), teamB: winner(14), winnerAdvancesTo: 28, status: "scheduled" },
+  { id: 23, side: "international", round: "Elimination Round 2", bracket: "elimination", dateTime: "2026-08-24T17:00:00-04:00", venue: "Volunteer", teamA: loser(11), teamB: winner(15), winnerAdvancesTo: 25, status: "scheduled" },
+  { id: 24, side: "us", round: "Elimination Round 2", bracket: "elimination", dateTime: "2026-08-24T19:00:00-04:00", venue: "Lamade", teamA: loser(12), teamB: winner(16), winnerAdvancesTo: 26, status: "scheduled" },
+  { id: 25, side: "international", round: "Elimination Round 3", bracket: "elimination", dateTime: "2026-08-25T13:00:00-04:00", venue: "Volunteer", teamA: loser(18), teamB: winner(23), winnerAdvancesTo: 31, status: "scheduled" },
+  { id: 26, side: "us", round: "Elimination Round 3", bracket: "elimination", dateTime: "2026-08-25T15:00:00-04:00", venue: "Lamade", teamA: loser(17), teamB: winner(24), winnerAdvancesTo: 32, status: "scheduled" },
+  { id: 27, side: "international", round: "Elimination Round 3", bracket: "elimination", dateTime: "2026-08-25T17:00:00-04:00", venue: "Volunteer", teamA: loser(20), teamB: winner(21), winnerAdvancesTo: 31, status: "scheduled" },
+  { id: 28, side: "us", round: "Elimination Round 3", bracket: "elimination", dateTime: "2026-08-25T19:00:00-04:00", venue: "Lamade", teamA: loser(19), teamB: winner(22), winnerAdvancesTo: 32, status: "scheduled" },
+  { id: 29, side: "international", round: "Winners Final", bracket: "winners", dateTime: "2026-08-26T13:00:00-04:00", venue: "Volunteer", teamA: winner(18), teamB: winner(20), winnerAdvancesTo: 35, loserAdvancesTo: 33, status: "scheduled" },
+  { id: 30, side: "us", round: "Winners Final", bracket: "winners", dateTime: "2026-08-26T15:00:00-04:00", venue: "Lamade", teamA: winner(17), teamB: winner(19), winnerAdvancesTo: 36, loserAdvancesTo: 34, status: "scheduled" },
+  { id: 31, side: "international", round: "Elimination Final", bracket: "elimination", dateTime: "2026-08-26T17:00:00-04:00", venue: "Volunteer", teamA: winner(25), teamB: winner(27), winnerAdvancesTo: 33, status: "scheduled" },
+  { id: 32, side: "us", round: "Elimination Final", bracket: "elimination", dateTime: "2026-08-26T19:00:00-04:00", venue: "Lamade", teamA: winner(26), teamB: winner(28), winnerAdvancesTo: 34, status: "scheduled" },
+  { id: 33, side: "international", round: "International Semifinal", bracket: "elimination", dateTime: "2026-08-27T15:00:00-04:00", venue: "Lamade", teamA: loser(29), teamB: winner(31), winnerAdvancesTo: 35, status: "scheduled" },
+  { id: 34, side: "us", round: "U.S. Semifinal", bracket: "elimination", dateTime: "2026-08-27T19:00:00-04:00", venue: "Lamade", teamA: loser(30), teamB: winner(32), winnerAdvancesTo: 36, status: "scheduled" },
+  { id: 35, side: "international", round: "International Championship", bracket: "championship", dateTime: "2026-08-29T12:30:00-04:00", venue: "Lamade", teamA: winner(29), teamB: winner(33), winnerAdvancesTo: 38, loserAdvancesTo: 37, status: "scheduled" },
+  { id: 36, side: "us", round: "U.S. Championship", bracket: "championship", dateTime: "2026-08-29T15:30:00-04:00", venue: "Lamade", teamA: winner(30), teamB: winner(34), winnerAdvancesTo: 38, loserAdvancesTo: 37, status: "scheduled" },
+  { id: 37, side: "world", round: "Third Place", bracket: "placement", dateTime: "2026-08-30T10:00:00-04:00", venue: "Lamade", teamA: loser(35), teamB: loser(36), status: "scheduled" },
+  { id: 38, side: "world", round: "LLBWS Championship", bracket: "championship", dateTime: "2026-08-30T15:00:00-04:00", venue: "Lamade", teamA: winner(35), teamB: winner(36), status: "scheduled" },
+];

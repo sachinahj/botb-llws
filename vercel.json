@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "*/10 * 19-30 8 *"
+    }
+  ]
+}

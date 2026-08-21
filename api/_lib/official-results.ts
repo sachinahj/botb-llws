@@ -6,6 +6,13 @@ import type { OfficialGameResult, OfficialResultsPayload } from "../../src/types
 export const OFFICIAL_SCHEDULE_URL = "https://www.littleleague.org/world-series/2026/llbws/tournaments/world-series/";
 const BLOB_PATH = "llws/2026-results.json";
 
+function hasBlobCredentials(): boolean {
+  return Boolean(
+    process.env.BLOB_READ_WRITE_TOKEN
+    || (process.env.VERCEL_OIDC_TOKEN && process.env.BLOB_STORE_ID),
+  );
+}
+
 function normalizeTeamName(name: string): string {
   return name
     .normalize("NFD")
@@ -72,14 +79,16 @@ export async function fetchOfficialResults(): Promise<OfficialResultsPayload> {
 }
 
 export async function readStoredResults(): Promise<OfficialResultsPayload | null> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  if (!hasBlobCredentials()) return null;
   const stored = await get(BLOB_PATH, { access: "private", useCache: false });
   if (!stored || stored.statusCode !== 200) return null;
   return new Response(stored.stream).json() as Promise<OfficialResultsPayload>;
 }
 
 export async function storeResults(payload: OfficialResultsPayload): Promise<void> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("BLOB_READ_WRITE_TOKEN is not configured.");
+  if (!hasBlobCredentials()) {
+    throw new Error("No Vercel Blob store is connected to this project.");
+  }
   await put(BLOB_PATH, JSON.stringify(payload), {
     access: "private",
     addRandomSuffix: false,

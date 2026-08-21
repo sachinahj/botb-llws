@@ -3,6 +3,18 @@ import { games } from "../data/games";
 import { resolveTournament } from "./bracket";
 
 describe("tournament routing", () => {
+  it("groups the opening and second winners rounds correctly on each side", () => {
+    const snapshot = resolveTournament();
+    const roundIds = (side: "us" | "international", round: string) => snapshot.games
+      .filter((game) => game.side === side && game.round === round)
+      .map((game) => game.id);
+
+    expect(roundIds("international", "Opening Round")).toEqual([1, 3]);
+    expect(roundIds("international", "Winners Round 2")).toEqual([5, 7, 9, 11]);
+    expect(roundIds("us", "Opening Round")).toEqual([2, 4]);
+    expect(roundIds("us", "Winners Round 2")).toEqual([6, 8, 10, 12]);
+  });
+
   it("advances winners through explicit game references", () => {
     const snapshot = resolveTournament();
     const game10 = snapshot.games.find((game) => game.id === 10)!;

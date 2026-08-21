@@ -74,6 +74,48 @@ button { font: inherit; }
 .world-finals { padding: 20px; display: flex; flex-wrap: wrap; gap: 16px; }
 .world-finals .game-card { width: min(320px, 100%); }
 
+.official-bracket-section { background: var(--paper); border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+.official-bracket-heading { min-height: 82px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 20px; background: var(--green-dark); color: white; border-bottom: 3px solid var(--gold); }
+.official-bracket-heading .eyebrow { color: #b9d7c9; }
+.official-bracket-heading h2 { margin: 3px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: 25px; letter-spacing: 0; }
+.connector-legend { display: flex; gap: 18px; color: #d7e5de; font-size: 11px; font-weight: 700; }
+.connector-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.connector-legend i { width: 24px; height: 0; display: inline-block; border-top: 2px solid #4f8069; }
+.connector-legend .loser-line { border-top-color: #c55749; border-top-style: dashed; }
+.bracket-view-tabs { padding: 0 22px; display: flex; align-items: stretch; background: #087a91; overflow-x: auto; }
+.bracket-view-tabs button { min-height: 45px; padding: 0 22px; border: 0; border-bottom: 3px solid transparent; color: #dff5f7; background: transparent; font-size: 12px; font-weight: 800; white-space: nowrap; cursor: pointer; }
+.bracket-view-tabs button:hover { background: rgba(255,255,255,.08); }
+.bracket-view-tabs button.active { color: white; border-bottom-color: var(--gold); background: rgba(0,0,0,.12); }
+.bracket-view-content { background: #f8faf8; }
+.official-bracket-scroll { position: relative; overflow: auto; overscroll-behavior-inline: contain; scrollbar-color: #8ea398 #e9eeea; }
+.official-bracket-scroll:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+.official-bracket { position: relative; min-width: 2200px; background-color: #fbfcfb; background-image: linear-gradient(#edf1ee 1px, transparent 1px), linear-gradient(90deg, #edf1ee 1px, transparent 1px); background-size: 40px 40px; }
+.diagram-side-title, .diagram-center-title { position: absolute; z-index: 3; color: var(--green-dark); font-size: 12px; font-weight: 900; text-transform: uppercase; }
+.diagram-side-title { top: 18px; padding-bottom: 5px; border-bottom: 2px solid var(--gold); }
+.diagram-side-title--us { left: 40px; }
+.diagram-side-title--international { right: 40px; }
+.diagram-center-title { left: 1025px; top: 612px; width: 150px; color: #956900; text-align: center; }
+.bracket-connectors { position: absolute; inset: 0; z-index: 1; overflow: visible; pointer-events: none; }
+.connector { fill: none; stroke: #7f9b8d; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.connector--loser { stroke: #c36a5d; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.diagram-game { position: absolute; z-index: 2; width: 190px; height: 90px; background: white; border: 1px solid #aebbb3; border-left: 3px solid #688e7b; border-radius: 3px; box-shadow: 0 2px 4px rgba(19,49,32,.09); overflow: hidden; }
+.diagram-game--elimination { border-left-color: #bd5547; }
+.diagram-game--championship { border-left-color: var(--gold); box-shadow: 0 2px 8px rgba(138,98,0,.18); }
+.diagram-game--placement { border-left-color: #188da0; }
+.diagram-game header { height: 24px; padding: 0 7px; display: flex; align-items: center; justify-content: space-between; gap: 6px; color: #647168; background: #f0f4f1; border-bottom: 1px solid #dfe5e0; font-size: 9px; text-transform: uppercase; }
+.diagram-team { height: 32px; padding: 0 7px; display: grid; grid-template-columns: minmax(0, 1fr) 16px; align-items: center; gap: 5px; border-bottom: 1px solid #e7ebe8; color: #202a24; font-size: 10px; font-weight: 750; }
+.diagram-team:last-child { border-bottom: 0; }
+.diagram-team span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.diagram-team strong { text-align: right; font-size: 12px; }
+.diagram-team--winner { color: var(--green-dark); background: #eaf7f0; }
+.diagram-team--eliminated:not(.diagram-team--winner) { color: #929a94; }
+.bracket-section--filtered, .finals-section { margin: 18px; }
+
+@media (min-width: 1000px) {
+  .official-bracket-scroll { height: 757px; overflow: hidden; }
+  .official-bracket { transform: scale(.62); transform-origin: left top; }
+}
+
 .table-shell { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; }
 th { padding: 12px 16px; color: var(--muted); background: #f6f8f6; text-align: left; font-size: 10px; text-transform: uppercase; }
@@ -114,6 +156,13 @@ tbody tr:hover { background: #fbfcfb; }
   .round-column { padding-right: 10px; scroll-snap-align: start; }
   .game-card { width: 236px; }
   .world-finals { padding: 14px; }
+  .official-bracket-heading { min-height: 72px; padding: 14px; }
+  .official-bracket-heading h2 { font-size: 21px; }
+  .connector-legend { display: none; }
+  .bracket-view-tabs { padding: 0; }
+  .bracket-view-tabs button { flex: 1; min-width: max-content; min-height: 43px; padding: 0 14px; font-size: 10px; }
+  .official-bracket-scroll::after { content: "Swipe to follow the bracket"; position: sticky; left: 12px; bottom: 12px; z-index: 5; display: inline-block; padding: 6px 8px; color: white; background: rgba(8,74,53,.88); border-radius: 3px; font-size: 9px; font-weight: 750; pointer-events: none; }
+  .bracket-section--filtered, .finals-section { margin: 10px; }
 
   .standings-table, .assignment-table { overflow: visible; }
   table, tbody, tr, td { display: block; }

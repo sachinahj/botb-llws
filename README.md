@@ -18,7 +18,7 @@ npm test
 npm run build
 ```
 
-The app reads official results through `/api/results`. A protected Vercel Cron Job scrapes the official schedule every 10 minutes during August 19-30, validates all 38 game cards, and stores the snapshot in a private Vercel Blob. The bundled results remain the fallback if the official page or storage is unavailable.
+The app reads official results through `/api/results`. A protected Vercel Cron Job scrapes the official schedule once nightly at approximately 10:00 PM Eastern during August 19-30, validates all 38 game cards, and stores the snapshot in a private Vercel Blob. The bundled results remain the fallback if the official page or storage is unavailable.
 
 ## Vercel setup
 

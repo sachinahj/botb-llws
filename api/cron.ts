@@ -1,7 +1,17 @@
 import { fetchOfficialResults, storeResults } from "./_lib/official-results";
 
-function isTournamentWindow(now: Date): boolean {
-  return now.getUTCFullYear() === 2026 && now.getUTCMonth() === 7 && now.getUTCDate() >= 19 && now.getUTCDate() <= 30;
+export function isTournamentWindow(now: Date): boolean {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  }).formatToParts(now);
+  const value = (type: Intl.DateTimeFormatPartTypes) => Number(parts.find((part) => part.type === type)?.value);
+  const year = value("year");
+  const month = value("month");
+  const day = value("day");
+  return year === 2026 && month === 8 && day >= 19 && day <= 30;
 }
 
 export async function GET(request: Request): Promise<Response> {

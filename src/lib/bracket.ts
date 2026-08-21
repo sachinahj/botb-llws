@@ -1,4 +1,4 @@
-import { games as baseGames } from "../data/games";
+import { games as baseGames, roundStages } from "../data/games";
 import { teams as baseTeams } from "../data/managers";
 import type { EntrantRef, Game, ResolvedGame, Side, Team, TeamRecord, TournamentSnapshot } from "../types";
 
@@ -66,8 +66,18 @@ function buildRecords(games: ResolvedGame[], teams: Team[]): Record<string, Team
   );
 
   const sideEliminationGame = new Map<string, number>();
+  const sidePlacementTier = new Map<string, number>();
+  const currentStage = new Map<string, number>();
   const sideChampion = new Map<Side, string>();
   const sideRunnerUp = new Map<Side, string>();
+
+  for (const game of games) {
+    if (game.side !== "us" && game.side !== "international") continue;
+    const stage = roundStages[game.round] ?? 0;
+    for (const team of [game.resolvedTeamA, game.resolvedTeamB]) {
+      if (team) currentStage.set(team.id, Math.max(currentStage.get(team.id) ?? 0, stage));
+    }
+  }
 
   for (const game of games) {
     if (game.status !== "final" || !game.winnerId || !game.loserId) continue;
@@ -85,8 +95,11 @@ function buildRecords(games: ResolvedGame[], teams: Team[]): Record<string, Team
     if ((game.side === "us" || game.side === "international") && game.bracket === "championship") {
       sideChampion.set(game.side, game.winnerId);
       sideRunnerUp.set(game.side, game.loserId);
-    } else if ((game.side === "us" || game.side === "international") && records[game.loserId].losses >= 2) {
+    }
+
+    if ((game.side === "us" || game.side === "international") && game.loserPlacementTier !== undefined) {
       sideEliminationGame.set(game.loserId, game.id);
+      sidePlacementTier.set(game.loserId, game.loserPlacementTier);
     }
 
     if (game.id === 38) {
@@ -96,7 +109,14 @@ function buildRecords(games: ResolvedGame[], teams: Team[]): Record<string, Team
 
   for (const side of ["us", "international"] as const) {
     const sideTeams = teams.filter((team) => team.side === side);
-    const ranked = rankSideTeams(sideTeams, records, sideChampion.get(side), sideRunnerUp.get(side), sideEliminationGame);
+    const ranked = rankSideTeams(
+      sideTeams,
+      records,
+      sideChampion.get(side),
+      sideRunnerUp.get(side),
+      sidePlacementTier,
+      currentStage,
+    );
     ranked.forEach((team, index) => {
       const record = records[team.id];
       record.projectedFinish = index + 1;
@@ -112,12 +132,13 @@ function buildRecords(games: ResolvedGame[], teams: Team[]): Record<string, Team
   return records;
 }
 
-function rankSideTeams(
+export function rankSideTeams(
   teams: Team[],
   records: Record<string, TeamRecord>,
   championId: string | undefined,
   runnerUpId: string | undefined,
-  eliminationGame: Map<string, number>,
+  placementTier: Map<string, number>,
+  currentStage: Map<string, number>,
 ): Team[] {
   return [...teams].sort((a, b) => {
     if (a.id === championId) return -1;
@@ -125,22 +146,28 @@ function rankSideTeams(
     if (a.id === runnerUpId) return -1;
     if (b.id === runnerUpId) return 1;
 
-    const aEliminated = eliminationGame.has(a.id);
-    const bEliminated = eliminationGame.has(b.id);
+    const aEliminated = placementTier.has(a.id);
+    const bEliminated = placementTier.has(b.id);
     if (aEliminated !== bEliminated) return aEliminated ? 1 : -1;
     if (aEliminated && bEliminated) {
-      const eliminatedLater = (eliminationGame.get(b.id) ?? 0) - (eliminationGame.get(a.id) ?? 0);
-      if (eliminatedLater !== 0) return eliminatedLater;
+      const tier = (placementTier.get(a.id) ?? 10) - (placementTier.get(b.id) ?? 10);
+      if (tier !== 0) return tier;
+    } else {
+      const stage = (currentStage.get(b.id) ?? 0) - (currentStage.get(a.id) ?? 0);
+      if (stage !== 0) return stage;
+
+      const lossDiff = records[a.id].losses - records[b.id].losses;
+      if (lossDiff !== 0) return lossDiff;
     }
 
     const ar = records[a.id];
     const br = records[b.id];
-    const lossDiff = ar.losses - br.losses;
-    if (lossDiff !== 0) return lossDiff;
-    const winDiff = br.wins - ar.wins;
-    if (winDiff !== 0) return winDiff;
-    const runDiff = runDifferential(br) - runDifferential(ar);
+    const winPercentage = winningPercentage(br) - winningPercentage(ar);
+    if (winPercentage !== 0) return winPercentage;
+    const runDiff = runDifferentialPerGame(br) - runDifferentialPerGame(ar);
     if (runDiff !== 0) return runDiff;
+    const runsAllowed = runsAllowedPerGame(ar) - runsAllowedPerGame(br);
+    if (runsAllowed !== 0) return runsAllowed;
     return a.region.localeCompare(b.region);
   });
 }
@@ -150,8 +177,22 @@ export function runDifferential(record: TeamRecord): number {
 }
 
 export function winningPercentage(record: TeamRecord): number {
-  const games = record.wins + record.losses;
-  return games === 0 ? 0 : record.wins / games;
+  const played = gamesPlayed(record);
+  return played === 0 ? 0 : record.wins / played;
+}
+
+export function gamesPlayed(record: TeamRecord): number {
+  return record.wins + record.losses;
+}
+
+export function runDifferentialPerGame(record: TeamRecord): number {
+  const played = gamesPlayed(record);
+  return played === 0 ? 0 : runDifferential(record) / played;
+}
+
+export function runsAllowedPerGame(record: TeamRecord): number {
+  const played = gamesPlayed(record);
+  return played === 0 ? 0 : record.runsAgainst / played;
 }
 
 export function sideName(side: Exclude<Side, "world">): string {

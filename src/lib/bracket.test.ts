@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { games } from "../data/games";
-import { resolveTournament } from "./bracket";
+import type { TeamRecord } from "../types";
+import { rankSideTeams, resolveTournament, runDifferentialPerGame, runsAllowedPerGame } from "./bracket";
 
 describe("tournament routing", () => {
   it("groups the opening and second winners rounds correctly on each side", () => {
@@ -40,5 +41,49 @@ describe("tournament routing", () => {
     expect(snapshot.records.midwest.losses).toBe(2);
     expect(snapshot.records.midwest.eliminated).toBe(true);
     expect(snapshot.records.midwest.statusLabel).toBe("Eliminated in Game 16");
+  });
+
+  it("uses advancement tier before winning percentage", () => {
+    const snapshot = resolveTournament();
+    const northwest = snapshot.teams.find((team) => team.id === "northwest")!;
+    const southeast = snapshot.teams.find((team) => team.id === "southeast")!;
+    const records: Record<string, TeamRecord> = {
+      northwest: { ...snapshot.records.northwest, wins: 0, losses: 2 },
+      southeast: { ...snapshot.records.southeast, wins: 2, losses: 2 },
+    };
+
+    const ranked = rankSideTeams(
+      [northwest, southeast],
+      records,
+      undefined,
+      undefined,
+      new Map([[northwest.id, 5], [southeast.id, 7]]),
+      new Map(),
+    );
+
+    expect(ranked.map((team) => team.id)).toEqual(["northwest", "southeast"]);
+  });
+
+  it("uses normalized performance within the same placement tier", () => {
+    const snapshot = resolveTournament();
+    const northwest = snapshot.teams.find((team) => team.id === "northwest")!;
+    const southeast = snapshot.teams.find((team) => team.id === "southeast")!;
+    const records: Record<string, TeamRecord> = {
+      northwest: { ...snapshot.records.northwest, wins: 1, losses: 1, runsFor: 8, runsAgainst: 6 },
+      southeast: { ...snapshot.records.southeast, wins: 2, losses: 2, runsFor: 18, runsAgainst: 12 },
+    };
+
+    const ranked = rankSideTeams(
+      [northwest, southeast],
+      records,
+      undefined,
+      undefined,
+      new Map([[northwest.id, 5], [southeast.id, 5]]),
+      new Map(),
+    );
+
+    expect(ranked.map((team) => team.id)).toEqual(["southeast", "northwest"]);
+    expect(runDifferentialPerGame(records.southeast)).toBe(1.5);
+    expect(runsAllowedPerGame(records.southeast)).toBe(3);
   });
 });

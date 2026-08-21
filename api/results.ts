@@ -1,4 +1,4 @@
-import { fetchOfficialResults, readStoredResults } from "./_lib/official-results";
+import { fetchOfficialResults, readStoredResults } from "./_lib/official-results.js";
 
 export async function GET(): Promise<Response> {
   try {

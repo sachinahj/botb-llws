@@ -1,7 +1,7 @@
 import { load } from "cheerio";
 import { get, put } from "@vercel/blob";
-import { teams } from "../../src/data/managers";
-import type { OfficialGameResult, OfficialResultsPayload } from "../../src/types";
+import { teams } from "../../src/data/managers.js";
+import type { OfficialGameResult, OfficialResultsPayload } from "../../src/types.js";
 
 export const OFFICIAL_SCHEDULE_URL = "https://www.littleleague.org/world-series/2026/llbws/tournaments/world-series/";
 const BLOB_PATH = "llws/2026-results.json";

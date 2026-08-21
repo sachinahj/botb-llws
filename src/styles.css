@@ -28,11 +28,6 @@ button { font: inherit; }
 .brand-lockup h1 { margin-top: 2px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 3vw, 35px); letter-spacing: 0; }
 .header-status { display: flex; align-items: center; gap: 12px; color: #d8e6df; font-size: 13px; }
 .header-status b { color: white; }
-.icon-button { width: 40px; height: 40px; padding: 0; display: grid; place-items: center; color: white; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.24); border-radius: 6px; cursor: pointer; }
-.icon-button:hover { background: rgba(255,255,255,.18); }
-.icon-button:disabled { opacity: .55; }
-.spin { animation: spin .8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
 
 .tab-bar { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); }
 .tab-inner { width: min(1480px, 100%); margin: 0 auto; padding: 0 28px; display: flex; gap: 5px; }
@@ -41,7 +36,6 @@ button { font: inherit; }
 .tab-inner button.active { color: var(--green-dark); border-bottom-color: var(--green); }
 .main-content { width: min(1480px, 100%); margin: 0 auto; padding: 18px 28px 56px; }
 .update-line { min-height: 24px; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 12px; }
-.refresh-message { color: var(--red); }
 .page-stack { display: grid; gap: 24px; }
 .bracket-section, .content-section { background: var(--paper); border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
 .section-heading { padding: 20px 22px 15px; display: flex; align-items: end; justify-content: space-between; gap: 16px; border-bottom: 1px solid #e5e9e5; }
@@ -127,6 +121,7 @@ tbody tr:hover { background: #fbfcfb; }
 .rank-badge { min-width: 38px; display: inline-flex; align-items: center; gap: 4px; font-size: 16px; }
 .rank-1 { color: #8a6200; } .rank-2 { color: #5d6b64; } .rank-3 { color: #9a5229; }
 .combined-score { display: block; font-size: 20px; color: var(--green-dark); }
+.odds { color: var(--green-dark); font-variant-numeric: tabular-nums; font-weight: 800; }
 .champion-note { color: #9a6a00; }
 .rules { padding-bottom: 24px; }
 .rules-list { margin: 0; padding: 8px 24px 0; list-style: none; }
@@ -141,7 +136,7 @@ tbody tr:hover { background: #fbfcfb; }
   .brand-mark { width: 43px; height: 43px; font-size: 18px; }
   .brand-lockup { gap: 10px; }
   .brand-lockup p { font-size: 9px; }
-  .brand-lockup h1 { font-size: 22px; }
+  .brand-lockup h1 { font-size: 18px; }
   .header-status > span { display: none; }
   .tab-inner { padding: 0; justify-content: space-around; }
   .tab-inner button { flex: 1; min-width: 0; min-height: 57px; padding: 5px 3px 4px; flex-direction: column; justify-content: center; gap: 3px; font-size: 10px; }
@@ -176,7 +171,9 @@ tbody tr:hover { background: #fbfcfb; }
   .standings-table td:nth-child(5) { grid-column: 1 / -1; padding-top: 10px; border-top: 1px dashed #dce2dd; display: flex; align-items: end; justify-content: space-between; }
   .standing-team strong { overflow-wrap: anywhere; }
   .assignment-table tbody tr { grid-template-columns: 1fr 1fr; }
-  .assignment-table td:first-child { grid-column: 1 / -1; }
+  .assignment-table td:nth-child(1), .assignment-table td:nth-child(2) { grid-column: 1 / -1; }
+  .assignment-table td:nth-child(5), .assignment-table td:nth-child(7) { min-width: 0; overflow-wrap: anywhere; }
+  .assignment-table td:nth-child(6), .assignment-table td:nth-child(8) { text-align: right; }
   .rules-list { padding-inline: 15px; }
   .rules-list li { grid-template-columns: 35px 1fr; }
   .rules-note { margin-inline: 15px; }

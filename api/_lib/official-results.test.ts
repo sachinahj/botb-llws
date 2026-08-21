@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseOfficialSchedule } from "./official-results";
+import { parseOfficialSchedule } from "./official-results.js";
 
 function gameCard(id: number, teamA: string, teamB: string, scoreA?: number, scoreB?: number): string {
   const score = (value?: number) => value === undefined ? "" : `<div class="ws-card__score">${value}</div>`;

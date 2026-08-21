@@ -1,6 +1,6 @@
 import { managers, teams } from "../data/managers";
 import type { StandingsOptions, TournamentSnapshot } from "../types";
-import { runDifferential, winningPercentage } from "./bracket";
+import { runDifferentialPerGame, runsAllowedPerGame, winningPercentage } from "./bracket";
 
 export type ManagerStanding = {
   rank: number;
@@ -14,7 +14,8 @@ export type ManagerStanding = {
   ownsWorldChampion: boolean;
   bestSingleFinish: number;
   combinedWinningPercentage: number;
-  combinedRunDifferential: number;
+  combinedRunDifferentialPerGame: number;
+  combinedRunsAllowedPerGame: number;
   coinFlip: number;
 };
 
@@ -30,8 +31,10 @@ export function compareStandings(a: ManagerStanding, b: ManagerStanding): number
   if (best !== 0) return best;
   const wp = b.combinedWinningPercentage - a.combinedWinningPercentage;
   if (wp !== 0) return wp;
-  const rd = b.combinedRunDifferential - a.combinedRunDifferential;
+  const rd = b.combinedRunDifferentialPerGame - a.combinedRunDifferentialPerGame;
   if (rd !== 0) return rd;
+  const runsAllowed = a.combinedRunsAllowedPerGame - b.combinedRunsAllowedPerGame;
+  if (runsAllowed !== 0) return runsAllowed;
   return a.coinFlip - b.coinFlip;
 }
 
@@ -63,7 +66,10 @@ export function calculateStandings(
       ownsWorldChampion,
       bestSingleFinish: Math.min(usRecord.projectedFinish, intlRecord.projectedFinish),
       combinedWinningPercentage: (winningPercentage(usRecord) + winningPercentage(intlRecord)) / 2,
-      combinedRunDifferential: runDifferential(usRecord) + runDifferential(intlRecord),
+      combinedRunDifferentialPerGame:
+        (runDifferentialPerGame(usRecord) + runDifferentialPerGame(intlRecord)) / 2,
+      combinedRunsAllowedPerGame:
+        (runsAllowedPerGame(usRecord) + runsAllowedPerGame(intlRecord)) / 2,
       coinFlip: stableCoinFlip(manager),
     };
   });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isTournamentWindow } from "./cron";
+import { isTournamentWindow } from "./cron.js";
 
 describe("scheduled result window", () => {
   it("accepts the nightly run using the Eastern tournament date", () => {

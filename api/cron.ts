@@ -1,4 +1,4 @@
-import { fetchOfficialResults, storeResults } from "./_lib/official-results";
+import { fetchOfficialResults, storeResults } from "./_lib/official-results.js";
 
 export function isTournamentWindow(now: Date): boolean {
   const parts = new Intl.DateTimeFormat("en-US", {

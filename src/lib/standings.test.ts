@@ -34,14 +34,16 @@ describe("fantasy standings", () => {
       ownsWorldChampion: false,
       bestSingleFinish: 3,
       combinedWinningPercentage: 0.5,
-      combinedRunDifferential: 0,
+      combinedRunDifferentialPerGame: 0,
+      combinedRunsAllowedPerGame: 3,
       coinFlip: 2,
     };
 
     expect(compareStandings({ ...base, ownsWorldChampion: true }, base)).toBeLessThan(0);
     expect(compareStandings({ ...base, bestSingleFinish: 2 }, base)).toBeLessThan(0);
     expect(compareStandings({ ...base, combinedWinningPercentage: 0.75 }, base)).toBeLessThan(0);
-    expect(compareStandings({ ...base, combinedRunDifferential: 4 }, base)).toBeLessThan(0);
+    expect(compareStandings({ ...base, combinedRunDifferentialPerGame: 4 }, base)).toBeLessThan(0);
+    expect(compareStandings({ ...base, combinedRunsAllowedPerGame: 2 }, base)).toBeLessThan(0);
     expect(compareStandings({ ...base, coinFlip: 1 }, base)).toBeLessThan(0);
   });
 });

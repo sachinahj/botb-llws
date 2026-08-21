@@ -16,6 +16,7 @@ export type Game = {
   teamB: EntrantRef;
   winnerAdvancesTo?: number;
   loserAdvancesTo?: number;
+  loserPlacementTier?: number;
   scoreA?: number;
   scoreB?: number;
   status: GameStatus;

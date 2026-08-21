@@ -56,12 +56,3 @@ export async function getTournamentData() {
     snapshot: resolveTournament(currentGames, teams),
   };
 }
-
-export async function refreshOfficialResults() {
-  const official = await fetchOfficialResults();
-  return {
-    source: "little-league",
-    lastUpdated: official.fetchedAt,
-    snapshot: resolveTournament(mergeOfficialResults(games, official), teams),
-  };
-}
